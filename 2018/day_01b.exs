@@ -7,12 +7,12 @@ defmodule Day1A do
             integer
         end)
         |> Stream.cycle()
-        |> Enum.reduce_while({0, []}, fn x, {current_frequency, seen_frequencies} ->
+        |> Enum.reduce_while({0, MapSet.new([0])}, fn x, {current_frequency, seen_frequencies} ->
             new_frequency = current_frequency + x
             if new_frequency in seen_frequencies do
                 {:halt, new_frequency}
             else
-                {:cont, {new_frequency, [new_frequency | seen_frequencies]}}
+                {:cont, {new_frequency, MapSet.put(seen_frequencies, new_frequency)}}
             end
         end)
     end
@@ -28,31 +28,14 @@ case System.argv() do
             import Day1A
 
             test "repeated_frequency base case" do
-                {:ok, io} = StringIO.open("""
-                +1
-                -2
-                +3
-                +1
-                """)
 
-                assert repeated_frequency(IO.stream(io, :line)) == 2
-            end
 
-            test "repeated_frequency zero" do
-                {:ok, io} = StringIO.open("""
-                +1
-                -1
-                """)
-
-                assert repeated_frequency(IO.stream(io, :line)) == 0
-            end
-
-            test "repeated_frequency only zeroes" do
-                {:ok, io} = StringIO.open("""
-                0
-                """)
-
-                assert repeated_frequency(IO.stream(io, :line)) == 0
+                assert repeated_frequency([
+                "+1\n",
+                "-2\n",
+                "+3\n",
+                "+1\n"
+                ]) == 2
             end
         end
 
