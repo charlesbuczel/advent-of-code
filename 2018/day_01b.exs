@@ -28,8 +28,6 @@ case System.argv() do
             import Day1A
 
             test "repeated_frequency base case" do
-
-
                 assert repeated_frequency([
                 "+1\n",
                 "-2\n",
